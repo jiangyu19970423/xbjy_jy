@@ -12,7 +12,6 @@ public class Dept {
     private String createTime;
     private Integer createBy;
     private Integer delFlag;
-
     public Integer getId() {
         return id;
     }
