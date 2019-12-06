@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,21 +32,41 @@ public class UserServlet extends BaseServlet {
     public void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //查询条件
         String account = req.getParameter("account");
+        String startTime = req.getParameter("startTime");
+        String endTime = req.getParameter("endTime");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if (startTime == null && endTime == null) {
+            startTime = "1949-10-01";
+            endTime = sdf.format(new Date());
+
+        } else if (startTime == null && endTime != null) {
+            startTime = "1949-10-01";
+            req.setAttribute("endTime", endTime);
+        } else if (startTime != null && endTime == null || endTime == "") {
+            endTime = sdf.format(new Date());
+            req.setAttribute("startTime", startTime);
+        } else {
+            req.setAttribute("startTime", startTime);
+            req.setAttribute("endTime", endTime);
+        }
+
         account = account == null ? "" : account;
         //当前页
         String pageStr = req.getParameter("page");
         //查询总记录数
-        Integer count = service.getCount(account);
+        Integer count = service.getCount(account, startTime, endTime);
 
         Page page = new Page();
         page.setCount(count);
         Integer pageCurrent = pageStr == null ? 1 : Integer.valueOf(pageStr);
         page.setPageCurrent(pageCurrent);
-        List<User> list = service.listAll(account, page);
+
+        List<User> list = service.listAll(account, page, startTime, endTime);
         //查询的数据
         req.setAttribute("list", list);
         //查询的条件
         req.setAttribute("account", account);
+
         //分页信息
         req.setAttribute("page", page);
         req.getRequestDispatcher("/view/sys/user/list.jsp").forward(req, resp);
@@ -56,6 +78,8 @@ public class UserServlet extends BaseServlet {
         //获取请求体里面的数据
         Map<String, String[]> map = req.getParameterMap();
         BeanUtils.populate(user, map);
+        //设置创建人
+        user.setCreateBy(super.getLoginUser().getId());
         service.addUser(user);
         resp.sendRedirect("/sys/user/list");
     }
@@ -112,7 +136,9 @@ public class UserServlet extends BaseServlet {
 
     public void forgetPassWord(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String account = request.getParameter("account");
+        account = account == null ? "" : account;
         String password = request.getParameter("password");
+        password = password == null ? "" : password;
         //前端输入的验证码
         String code = request.getParameter("code");
         HttpSession session = request.getSession();

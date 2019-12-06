@@ -19,21 +19,20 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao = new UserDao();
 
     @Override
-    public List<User> listAll(String account, Page page) {
+    public List<User> listAll(String account, Page page,String startTime,String endTime) {
 
-        return userDao.listAll(account, page);
+        return userDao.listAll(account, page,startTime,endTime);
     }
 
     @Override
-    public Integer getCount(String account) {
-        return userDao.getCount(account);
+    public Integer getCount(String account,String startTime,String endTime) {
+        return userDao.getCount(account,startTime,endTime);
     }
 
     @Override
     public void addUser(User user) {
         user.setPassword(MDUtil.md5(user.getPassword()));
         user.setCreateTime(DateUtil.getDateStr());
-        user.setCreateBy(null);
         userDao.addUser(user);
     }
 
@@ -56,5 +55,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updatePassWord(User user) {
         userDao.updatePassWord(user);
+    }
+
+    @Override
+    public List<User> checkLogin(User user) {
+        return userDao.checkLogin(user);
     }
 }

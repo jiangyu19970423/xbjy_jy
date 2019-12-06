@@ -8,56 +8,56 @@ package com.sys.entity;
  */
 public class User {
     /**
-     *部门名
+     * 部门名
      */
     private String deptName;
     /**
-     *Id
+     * Id
      */
 
     private Integer id;
     /**
-     *部门Id
+     * 部门Id
      */
     private Integer deptId;
     /**
-     *账号
+     * 账号
      */
     private String account;
     /**
-     *密码
+     * 密码
      */
     private String password;
     /**
-     *姓名
+     * 姓名
      */
     private String name;
     /**
-     *年龄
+     * 年龄
      */
     private Integer age;
     /**
-     *性别
+     * 性别
      */
     private Integer sex;
     /**
-     *邮箱
+     * 邮箱
      */
     private String email;
     /**
-     *出生日期
+     * 出生日期
      */
     private String birthDate;
     /**
-     *创建时间
+     * 创建时间
      */
     private String createTime;
     /**
-     *创建人
+     * 创建人
      */
-    private String createBy;
+    private Integer createBy;
     /**
-     *删除标记
+     * 删除标记
      */
     private Integer delFlag;
 
@@ -141,11 +141,11 @@ public class User {
         this.createTime = createTime;
     }
 
-    public String getCreateBy() {
+    public Integer getCreateBy() {
         return createBy;
     }
 
-    public void setCreateBy(String createBy) {
+    public void setCreateBy(Integer createBy) {
         this.createBy = createBy;
     }
 
@@ -179,7 +179,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", birthDate='" + birthDate + '\'' +
                 ", createTime='" + createTime + '\'' +
-                ", createBy='" + createBy + '\'' +
+                ", createBy=" + createBy +
                 ", delFlag=" + delFlag +
                 '}';
     }

@@ -16,7 +16,7 @@ import java.io.IOException;
  * @Description:
  */
 @WebFilter("/*")
-public class Filter implements javax.servlet.Filter {
+public class CharacterFilter implements javax.servlet.Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request=(HttpServletRequest)servletRequest;

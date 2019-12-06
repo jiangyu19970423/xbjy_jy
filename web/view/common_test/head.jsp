@@ -20,11 +20,12 @@
     <div class="container">
         <div class="navbar-header">
             <a href="" class="navbar-brand">小标交友</a>
+
         </div>
         <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="关键字">
-            <a href="" class="btn btn-default">
-                <span class="glyphicon glyphicon-search"></span>搜索</a>
+            当前在线人数:${applicationScope.applicationLoginCount}
+            <a href="/index.jsp">登出</a>
+
         </form>
     </div>
 </div>

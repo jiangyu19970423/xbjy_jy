@@ -7,11 +7,39 @@ package com.sys.entity;
  * @Description:
  */
 public class Dept {
+    /**
+     * 创建人
+     */
+    private String userName;
+    /**
+     * 各部门人数统计
+     */
+
+    private Integer countUser;
     private Integer id;
     private String name;
     private String createTime;
     private Integer createBy;
     private Integer delFlag;
+
+
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Integer getCountUser() {
+        return countUser;
+    }
+
+    public void setCountUser(Integer countUser) {
+        this.countUser = countUser;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -50,5 +78,13 @@ public class Dept {
 
     public void setDelFlag(Integer delFlag) {
         this.delFlag = delFlag;
+    }
+
+    public String getuserName() {
+        return userName;
+    }
+
+    public void setuserName(String userName) {
+        this.userName = userName;
     }
 }

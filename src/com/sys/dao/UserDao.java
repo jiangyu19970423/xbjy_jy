@@ -17,7 +17,7 @@ import java.util.List;
 public class UserDao {
     private JdbcTemplate jdbcTemplate = new JdbcTemplate(DBUtil.getDataSource());
 
-    public List<User> listAll(String account, Page page) {
+    public List<User> listAll(String account, Page page, String startTime, String endTime) {
         String sql = "select " +
                 "d.name deptName," +
                 "u.id id," +
@@ -26,25 +26,26 @@ public class UserDao {
                 "u.age age," +
                 "u.sex sex," +
                 "u.birth_date birthDate," +
-                "u.create_time createTime" +
+                "u.create_time createTime," +
+                "u.create_by createBy" +
                 " from " +
                 "sys_user u " +
                 "left join sys_dept d on u.dept_id=d.id" +
-                " where u.account like ? limit ?,?";
+                " where u.account like ? and  u.create_time between ? and ? limit ?,?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), "%" + account + "%",
-                (page.getPageCurrent() - 1) * page.getPageSize(), page.getPageSize());
+                startTime, endTime, (page.getPageCurrent() - 1) * page.getPageSize(), page.getPageSize());
 
     }
 
-    public Integer getCount(String account) {
-        String sql = "select count(*) from sys_user where account like ?";
-        return jdbcTemplate.queryForObject(sql, Integer.class, "%" + account + "%");
+    public Integer getCount(String account, String startTime, String endTime) {
+        String sql = "select count(*) from sys_user where account like ? and create_time between ? and ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, "%" + account + "%", startTime, endTime);
     }
 
 
     public void addUser(User user) {
-        String sql = "insert into sys_user(id,dept_id,account,password,name,age,sex,email,birth_date,create_time) values(null,?,?,?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, user.getDeptId(), user.getAccount(), user.getPassword(), user.getName(), user.getAge(), user.getSex(), user.getEmail(), user.getBirthDate(), user.getCreateTime());
+        String sql = "insert into sys_user(id,dept_id,account,password,name,age,sex,email,birth_date,create_time,create_by) values(null,?,?,?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, user.getDeptId(), user.getAccount(), user.getPassword(), user.getName(), user.getAge(), user.getSex(), user.getEmail(), user.getBirthDate(), user.getCreateTime(),user.getCreateBy());
 
     }
 
@@ -65,7 +66,14 @@ public class UserDao {
 
 
     public void updatePassWord(User user) {
+        //系统账号account唯一
         String sql = "update sys_user set password=? where account=?";
         jdbcTemplate.update(sql, user.getPassword(), user.getAccount());
+    }
+
+    public List<User> checkLogin(User user) {
+        String sql = "select * from sys_user where account=? and password=?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), user.getAccount(), user.getPassword());
+
     }
 }
